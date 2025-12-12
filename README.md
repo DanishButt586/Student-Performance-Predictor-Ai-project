@@ -6,11 +6,11 @@ In this algorithm, we use the `student-mat.csv` dataset, which is part of the [U
 
 **The project consists of two main components:**
 
-- [`GUI.ipynb`](https://github.com/William-Laverty/ML-Student-Performance-Predictor/blob/main/gradePredictor%20-%20GUI.ipynb) This Jupyter Notebook contains a user-friendly graphical user interface (GUI) that allows users to input student data and obtain grade predictions through an interactive and intuitive interface. 
+- [`GUI.ipynb`](https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project/blob/main/gradePredictor%20-%20GUI.ipynb) This Jupyter Notebook contains a user-friendly graphical user interface (GUI) that allows users to input student data and obtain grade predictions through an interactive and intuitive interface. 
 
-- [`TERMINAL.ipynb`](https://github.com/William-Laverty/ML-Student-Performance-Predictor/blob/main/gradePredictor%20-%20TERMINAL.ipynb) This Jupyter Notebook provides a command-line interface (CLI) version of the grade prediction tool, enabling users to input student data through the terminal and receive grade predictions.
+- [`TERMINAL.ipynb`](https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project/blob/main/gradePredictor%20-%20TERMINAL.ipynb) This Jupyter Notebook provides a command-line interface (CLI) version of the grade prediction tool, enabling users to input student data through the terminal and receive grade predictions.
 
-The [terminal version](https://github.com/William-Laverty/ML-Student-Performance-Predictor/blob/main/gradePredictor%20-%20TERMINAL.ipynb) includes a more detailed explanation of the prediction process, accompanied by graphs and visualizations to provide users with a deeper understanding of the model's performance and results. Users can explore the data analysis and model evaluation in the terminal version to gain insights into the grade prediction tool's performance.
+The [terminal version](https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project/blob/main/gradePredictor%20-%20TERMINAL.ipynb) includes a more detailed explanation of the prediction process, accompanied by graphs and visualizations to provide users with a deeper understanding of the model's performance and results. Users can explore the data analysis and model evaluation in the terminal version to gain insights into the grade prediction tool's performance.
 
 ## 🎯 Steps Performed by the Code
 
@@ -51,13 +51,21 @@ pip install pandas numpy scikit-learn ipywidgets ttkthemes numpy matplotlib.pypl
 1. Clone the repository and navigate to the project directory.
 
 ```bash
-git clone https://github.com/cgs-ist/student-grade-predictor-William-Laverty.git
-cd ML-Student-Performance-Predictor
+git clone https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project.git
+cd Student-Performance-Predictor-Ai-project
 ```
 
 2. Ensure you have the required packages installed (see the Installation section).
 
-3. Run the Jupyter notebook `"Student_Performance_Predictor.ipynb"` and interact with the GUI to predict student performance.
+3. Run the Jupyter notebook `"gradePredictor - GUI.ipynb"` or `"gradePredictor - TERMINAL.ipynb"` to predict student performance.
+
+Alternatively, you can run the Flask web application:
+
+```bash
+python app.py
+```
+
+Then open your browser and navigate to `http://127.0.0.1:5000/`
 
 ### 📝 License
 
