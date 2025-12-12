@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Student Grade Predictor - Flask Web Application
-Uses Linear Regression to predict student final grades.
+Uses Linear Regression to predict student next semester SGPA based on previous semesters.
 """
 
 from flask import Flask, render_template, request, jsonify
@@ -123,7 +123,7 @@ def get_top_features(k=8):
     return _feature_pairs[:k] if _feature_pairs else []
 
 def risk_level(pred_grade):
-    """Assess risk based on predicted grade."""
+    """Assess risk based on predicted grade (0-20 scale)."""
     if pred_grade >= 15:
         return "LOW RISK", "Strong Performance"
     elif pred_grade >= 12:
@@ -132,6 +132,19 @@ def risk_level(pred_grade):
         return "ELEVATED RISK", "Borderline Pass"
     else:
         return "HIGH RISK", "At Risk - Intervention Needed"
+
+def risk_assessment_sgpa(pred_sgpa):
+    """Assess risk based on predicted SGPA (0-4 scale)."""
+    if pred_sgpa >= 3.5:
+        return "EXCELLENT", "Strong Performance - Excellent Track Record"
+    elif pred_sgpa >= 3.0:
+        return "GOOD", "Good Performance - On Track"
+    elif pred_sgpa >= 2.5:
+        return "FAIR", "Fair Performance - Moderate Effort Needed"
+    elif pred_sgpa >= 2.0:
+        return "BELOW AVERAGE", "Below Average - Intervention Recommended"
+    else:
+        return "POOR", "Poor Performance - Immediate Action Needed"
 
 # ------------------------------------------------------------------
 # Routes
@@ -143,50 +156,107 @@ def index():
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
-    """Handle prediction requests."""
+    """Handle prediction requests for all remaining semester SGPAs based on previous semester grades."""
     try:
         data = request.get_json()
+        semesters = data.get('semesters', [])
         
-        g1_val = float(data.get('g1', 12))
-        g2_val = float(data.get('g2', 12))
-        study_val = float(data.get('study', 5))
-        absences_val = float(data.get('absences', 4))
-        failures_val = float(data.get('failures', 0))
-        goout_val = float(data.get('goout', 3))
-        age_val = float(data.get('age', 18))
-        # Daily Alcohol (Dalc) removed from UI and backend
+        # Validate at least 1 semester is provided
+        if not semesters or len(semesters) == 0:
+            return jsonify({'error': 'Please enter at least 1 semester SGPA to predict remaining semesters'}), 400
         
-        # Validate inputs
-        if not (0 <= g1_val <= 20 and 0 <= g2_val <= 20):
-            return jsonify({'error': 'G1 and G2 must be between 0 and 20'}), 400
-        if not (0 <= study_val <= 60):
-            return jsonify({'error': 'Study time must be between 0 and 60 hours'}), 400
+        # Validate maximum 7 semesters (need at least 1 to predict)
+        if len(semesters) >= 8:
+            return jsonify({'error': 'You have completed all 8 semesters. No predictions needed.'}), 400
         
-        # Build input row
-        row = build_base_input()
-        row.loc[0, "G1"] = g1_val
-        row.loc[0, "G2"] = g2_val
-        row.loc[0, "studytime"] = study_val
-        row.loc[0, "absences"] = absences_val
-        row.loc[0, "failures"] = failures_val
-        row.loc[0, "goout"] = goout_val
-        row.loc[0, "age"] = age_val
-        # Dalc removed
+        # Validate all semester values are valid
+        for sem in semesters:
+            sgpa = float(sem.get('sgpa', 0))
+            if not (0 <= sgpa <= 4):
+                return jsonify({'error': 'SGPA must be between 0 and 4'}), 400
         
-        # Predict
-        pred_g3 = float(model.predict(row)[0])
-        pred_g3 = max(0, min(20, pred_g3))
+        # Extract SGPA values and calculate statistics
+        sgpa_values = [float(sem['sgpa']) for sem in semesters]
+        avg_sgpa = np.mean(sgpa_values)
+        num_semesters = len(semesters)
         
-        # Risk assessment
-        risk, insight = risk_level(pred_g3)
+        # Calculate trend
+        if num_semesters > 1:
+            # Linear regression on semester progression to detect trend
+            semester_nums = np.arange(1, num_semesters + 1)
+            trend_slope = np.polyfit(semester_nums, sgpa_values, 1)[0]
+            
+            if trend_slope > 0.05:
+                trend_direction = "Improving ↑"
+            elif trend_slope < -0.05:
+                trend_direction = "Declining ↓"
+            else:
+                trend_direction = "Stable →"
+        else:
+            trend_direction = "First Semester"
+            trend_slope = 0
         
-        # Top features
-        top_feats = get_top_features(8)
-        features_list = [{"name": name.replace('_', ' '), "coef": f"{coef:+.3f}"} 
-                        for name, coef in top_feats]
+        # Predict all remaining semesters
+        predictions = []
+        current_sgpa_history = sgpa_values.copy()
+        
+        for next_sem_num in range(num_semesters + 1, 9):  # Predict up to semester 8
+            # Predict next semester SGPA using weighted approach
+            num_hist = len(current_sgpa_history)
+            last_sgpa = current_sgpa_history[-1]
+            
+            if num_hist == 1:
+                # Only one semester: use it as baseline with slight regression to mean
+                pred_sgpa = last_sgpa * 0.9 + 2.5 * 0.1
+            else:
+                # Multiple semesters: weighted average with trend consideration
+                weights = np.exp(np.linspace(0, 1, num_hist))  # Exponential weights favoring recent
+                weighted_avg = np.average(current_sgpa_history, weights=weights)
+                
+                # Calculate momentum (recent performance vs overall average)
+                recent_avg = np.mean(current_sgpa_history[-min(3, num_hist):])
+                momentum = recent_avg - np.mean(current_sgpa_history)
+                
+                # Predict with trend and momentum
+                pred_sgpa = weighted_avg + (momentum * 0.3)
+                
+                # Add trend influence with decay for distant predictions
+                if num_hist > 2:
+                    decay_factor = 0.9 ** (next_sem_num - num_semesters - 1)
+                    pred_sgpa += trend_slope * 0.2 * decay_factor
+            
+            # Bound the prediction to valid SGPA range
+            pred_sgpa = max(0, min(4, pred_sgpa))
+            
+            predictions.append({
+                'semester': next_sem_num,
+                'predicted_sgpa': round(pred_sgpa, 2)
+            })
+            
+            # Add prediction to history for next iteration
+            current_sgpa_history.append(pred_sgpa)
+        
+        # Risk assessment based on average of predicted SGPAs
+        avg_predicted = np.mean([p['predicted_sgpa'] for p in predictions])
+        risk, insight = risk_assessment_sgpa(avg_predicted)
+        
+        # Generate performance indicators
+        features_list = []
+        features_list.append({"name": "Current Average", "coef": f"{avg_sgpa:.2f}"})
+        features_list.append({"name": "Last Semester", "coef": f"{sgpa_values[-1]:.2f}"})
+        features_list.append({"name": "Semesters Completed", "coef": f"{num_semesters}"})
+        if num_semesters > 1:
+            features_list.append({"name": "Highest SGPA", "coef": f"{max(sgpa_values):.2f}"})
+            features_list.append({"name": "Lowest SGPA", "coef": f"{min(sgpa_values):.2f}"})
+            std_dev = np.std(sgpa_values)
+            features_list.append({"name": "Consistency", "coef": f"{(4-std_dev)/4*100:.0f}%"})
+        features_list.append({"name": "Projected Final Avg", "coef": f"{np.mean(sgpa_values + [p['predicted_sgpa'] for p in predictions]):.2f}"})
         
         return jsonify({
-            'predicted_grade': round(pred_g3, 2),
+            'predictions': predictions,
+            'current_average': round(avg_sgpa, 2),
+            'trend': trend_direction,
+            'semesters_count': num_semesters,
             'risk': risk,
             'insight': insight,
             'features': features_list
@@ -206,45 +276,6 @@ def get_metrics():
         'classification_accuracy': round(clf_acc, 4),
         'classification_f1': round(clf_f1, 4)
     })
-
-@app.route('/api/classify', methods=['POST'])
-def classify():
-    """Binary classification: pass (1) / fail (0) based on inputs."""
-    try:
-        data = request.get_json()
-        g1_val = float(data.get('g1', 12))
-        g2_val = float(data.get('g2', 12))
-        study_val = float(data.get('study', 5))
-        absences_val = float(data.get('absences', 4))
-        failures_val = float(data.get('failures', 0))
-        goout_val = float(data.get('goout', 3))
-        age_val = float(data.get('age', 18))
-        # Daily Alcohol (Dalc) removed from UI and backend
-
-        if not (0 <= g1_val <= 20 and 0 <= g2_val <= 20):
-            return jsonify({'error': 'G1 and G2 must be between 0 and 20'}), 400
-        if not (0 <= study_val <= 60):
-            return jsonify({'error': 'Study time must be between 0 and 60 hours'}), 400
-
-        row = build_base_input()
-        row.loc[0, "G1"] = g1_val
-        row.loc[0, "G2"] = g2_val
-        row.loc[0, "studytime"] = study_val
-        row.loc[0, "absences"] = absences_val
-        row.loc[0, "failures"] = failures_val
-        row.loc[0, "goout"] = goout_val
-        row.loc[0, "age"] = age_val
-        # Dalc removed
-
-        prob_pass = float(clf.predict_proba(row)[0, 1])
-        pred_class = int(prob_pass >= 0.5)
-
-        return jsonify({
-            'pass_probability': round(prob_pass, 3),
-            'prediction': pred_class
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=5000)

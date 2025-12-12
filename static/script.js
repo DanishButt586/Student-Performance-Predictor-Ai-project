@@ -29,20 +29,27 @@ function predictGrade() {
     // Clear previous messages
     hideMessages();
 
-    // Get input values
-    const inputData = {
-        g1: parseFloat(document.getElementById('g1').value),
-        g2: parseFloat(document.getElementById('g2').value),
-        study: parseFloat(document.getElementById('study').value),
-        absences: parseFloat(document.getElementById('absences').value),
-        failures: parseFloat(document.getElementById('failures').value),
-        goout: parseFloat(document.getElementById('goout').value),
-        age: parseFloat(document.getElementById('age').value)
-    };
+    // Get semester inputs
+    const semesters = [];
+    for (let i = 1; i <= 8; i++) {
+        const value = document.getElementById(`sem${i}`).value;
+        if (value !== '' && value !== null) {
+            semesters.push({
+                semester: i,
+                sgpa: parseFloat(value)
+            });
+        }
+    }
 
-    // Validate inputs
-    if (isNaN(inputData.g1) || isNaN(inputData.g2) || isNaN(inputData.study)) {
-        showError('Please enter valid numbers for all fields');
+    // Validate at least 1 semester is entered
+    if (semesters.length === 0) {
+        showError('Please enter at least 1 semester SGPA to predict the next semester.');
+        return;
+    }
+
+    // Validate all entered values are valid numbers between 0-4
+    if (!semesters.every(s => !isNaN(s.sgpa) && s.sgpa >= 0 && s.sgpa <= 4)) {
+        showError('Please enter valid SGPA values between 0 and 4 for each semester.');
         return;
     }
 
@@ -57,7 +64,7 @@ function predictGrade() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(inputData)
+        body: JSON.stringify({ semesters: semesters })
     })
         .then(response => response.json())
         .then(data => {
@@ -82,22 +89,42 @@ function displayResults(data) {
     // Show results section
     document.getElementById('results-section').style.display = 'block';
 
-    // Predicted grade
-    document.getElementById('pred-grade').textContent = `${data.predicted_grade} / 20`;
+    // Current average
+    document.getElementById('current-avg').textContent = `${data.current_average} / 4.0`;
+
+    // Trend
+    document.getElementById('trend').textContent = data.trend;
+
+    // Predictions grid
+    const predictionsGrid = document.getElementById('predictions-grid');
+    if (data.predictions && data.predictions.length > 0) {
+        predictionsGrid.innerHTML = data.predictions
+            .map(p => `
+                <div class="prediction-card">
+                    <div class="prediction-semester">Semester ${p.semester}</div>
+                    <div class="prediction-value">${p.predicted_sgpa} / 4.0</div>
+                </div>
+            `)
+            .join('');
+    } else {
+        predictionsGrid.textContent = 'No predictions available';
+    }
 
     // Risk assessment
     const riskBadge = document.getElementById('risk-assessment');
     riskBadge.textContent = data.risk;
     riskBadge.className = 'result-value risk-badge';
 
-    if (data.risk.includes('LOW')) {
-        riskBadge.classList.add('low');
-    } else if (data.risk.includes('MODERATE')) {
-        riskBadge.classList.add('moderate');
-    } else if (data.risk.includes('ELEVATED')) {
-        riskBadge.classList.add('elevated');
+    if (data.risk.includes('EXCELLENT')) {
+        riskBadge.classList.add('excellent');
+    } else if (data.risk.includes('GOOD')) {
+        riskBadge.classList.add('good');
+    } else if (data.risk.includes('FAIR')) {
+        riskBadge.classList.add('fair');
+    } else if (data.risk.includes('BELOW')) {
+        riskBadge.classList.add('below');
     } else {
-        riskBadge.classList.add('high');
+        riskBadge.classList.add('poor');
     }
 
     // Insight
@@ -110,7 +137,7 @@ function displayResults(data) {
             .map(f => `• ${f.name}: ${f.coef}`)
             .join('\n');
     } else {
-        featuresList.textContent = 'Unable to extract feature importance';
+        featuresList.textContent = 'Performance analysis based on historical data';
     }
 
     // Scroll to results
@@ -118,14 +145,10 @@ function displayResults(data) {
 }
 
 function resetForm() {
-    // Reset inputs to defaults
-    document.getElementById('g1').value = 12;
-    document.getElementById('g2').value = 12;
-    document.getElementById('study').value = 5;
-    document.getElementById('absences').value = 4;
-    document.getElementById('failures').value = 0;
-    document.getElementById('goout').value = 3;
-    document.getElementById('age').value = 18;
+    // Reset all semester inputs
+    for (let i = 1; i <= 8; i++) {
+        document.getElementById(`sem${i}`).value = '';
+    }
 
     // Hide results and messages
     document.getElementById('results-section').style.display = 'none';

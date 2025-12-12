@@ -48,83 +48,107 @@
 
       <!-- Input Section -->
       <section class="input-section">
-        <h2>Student Information</h2>
-        <div class="input-grid">
+        <h2>Academic Performance (Semester SGPA)</h2>
+        <p class="semester-info">
+          Enter your SGPA (0-4.0) for each completed semester. At least 1
+          semester grade is required to predict all remaining semester grades.
+          Maximum 8 semesters.
+        </p>
+        <div class="semester-grid">
           <div class="input-group">
-            <label for="g1">G1 (1st Period Grade, 0-20)</label>
+            <label for="sem1">Semester 1 SGPA</label>
             <input
               type="number"
-              id="g1"
-              name="g1"
-              min="0"
-              max="20"
-              value="12"
-            />
-          </div>
-          <div class="input-group">
-            <label for="g2">G2 (2nd Period Grade, 0-20)</label>
-            <input
-              type="number"
-              id="g2"
-              name="g2"
-              min="0"
-              max="20"
-              value="12"
-            />
-          </div>
-          <div class="input-group">
-            <label for="study">Weekly Study Time (hours)</label>
-            <input
-              type="number"
-              id="study"
-              name="study"
-              min="0"
-              max="40"
-              value="5"
-            />
-          </div>
-          <div class="input-group">
-            <label for="absences">Absences</label>
-            <input
-              type="number"
-              id="absences"
-              name="absences"
-              min="0"
-              max="50"
-              value="4"
-            />
-          </div>
-          <div class="input-group">
-            <label for="failures">Past Failures</label>
-            <input
-              type="number"
-              id="failures"
-              name="failures"
+              id="sem1"
+              name="sem1"
               min="0"
               max="4"
-              value="0"
+              step="0.1"
+              placeholder="0.0"
             />
           </div>
           <div class="input-group">
-            <label for="goout">Going Out (1=Low, 5=High)</label>
+            <label for="sem2">Semester 2 SGPA</label>
             <input
               type="number"
-              id="goout"
-              name="goout"
-              min="1"
-              max="5"
-              value="3"
+              id="sem2"
+              name="sem2"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
             />
           </div>
           <div class="input-group">
-            <label for="age">Age (years)</label>
+            <label for="sem3">Semester 3 SGPA</label>
             <input
               type="number"
-              id="age"
-              name="age"
-              min="15"
-              max="25"
-              value="18"
+              id="sem3"
+              name="sem3"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
+            />
+          </div>
+          <div class="input-group">
+            <label for="sem4">Semester 4 SGPA</label>
+            <input
+              type="number"
+              id="sem4"
+              name="sem4"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
+            />
+          </div>
+          <div class="input-group">
+            <label for="sem5">Semester 5 SGPA</label>
+            <input
+              type="number"
+              id="sem5"
+              name="sem5"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
+            />
+          </div>
+          <div class="input-group">
+            <label for="sem6">Semester 6 SGPA</label>
+            <input
+              type="number"
+              id="sem6"
+              name="sem6"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
+            />
+          </div>
+          <div class="input-group">
+            <label for="sem7">Semester 7 SGPA</label>
+            <input
+              type="number"
+              id="sem7"
+              name="sem7"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
+            />
+          </div>
+          <div class="input-group">
+            <label for="sem8">Semester 8 SGPA</label>
+            <input
+              type="number"
+              id="sem8"
+              name="sem8"
+              min="0"
+              max="4"
+              step="0.1"
+              placeholder="0.0"
             />
           </div>
         </div>
@@ -139,19 +163,27 @@
         <h2>Prediction Results</h2>
         <div class="results-container">
           <div class="result-item">
-            <span class="result-label">Predicted Final Grade (G3):</span>
-            <span class="result-value" id="pred-grade">--</span>
+            <span class="result-label">Current Average SGPA:</span>
+            <span class="result-value" id="current-avg">--</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Performance Trend:</span>
+            <span class="result-value" id="trend">--</span>
+          </div>
+          <div class="result-item full-width">
+            <span class="result-label">Predicted Remaining Semesters:</span>
+            <div class="predictions-grid" id="predictions-grid">--</div>
           </div>
           <div class="result-item">
             <span class="result-label">Risk Assessment:</span>
             <span class="result-value risk-badge" id="risk-assessment">--</span>
           </div>
           <div class="result-item">
-            <span class="result-label">Intervention:</span>
+            <span class="result-label">Recommendation:</span>
             <span class="result-insight" id="insight-text">--</span>
           </div>
           <div class="result-item features-item">
-            <span class="result-label">Top Contributing Features:</span>
+            <span class="result-label">Key Performance Indicators:</span>
             <div class="features-list" id="features-list">--</div>
           </div>
         </div>

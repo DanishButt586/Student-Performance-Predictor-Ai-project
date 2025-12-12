@@ -131,6 +131,22 @@ body {
 .input-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+    .semester-info {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+        padding: 12px;
+        background-color: var(--bg-input);
+        border-left: 3px solid var(--accent);
+        border-radius: 4px;
+    }
+
+    .semester-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+    }
     gap: 16px;
 }
 
@@ -245,6 +261,32 @@ body {
     color: var(--danger);
 }
 
+/* New SGPA-based risk levels */
+.risk-badge.excellent {
+    background-color: rgba(0, 255, 0, 0.2);
+    color: #00FF00;
+}
+
+.risk-badge.good {
+    background-color: rgba(50, 205, 50, 0.2);
+    color: #32CD32;
+}
+
+.risk-badge.fair {
+    background-color: rgba(255, 215, 0, 0.2);
+    color: #FFD700;
+}
+
+.risk-badge.below {
+    background-color: rgba(255, 165, 0, 0.2);
+    color: #FFA500;
+}
+
+.risk-badge.poor {
+    background-color: rgba(255, 99, 71, 0.2);
+    color: #FF6347;
+}
+
 .features-item {
     flex-direction: column;
     align-items: flex-start;
@@ -261,6 +303,49 @@ body {
     font-family: 'Monaco', 'Courier New', monospace;
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+/* Predictions Grid */
+.full-width {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.predictions-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.prediction-card {
+    background-color: var(--bg-input);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.prediction-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.prediction-semester {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.prediction-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--accent);
 }
 
 .feature-item {
