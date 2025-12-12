@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Performance Predictor</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>Student Performance Predictor</h1>
+        <p class="subtitle">
+          ML-Based Grade Prediction System | Linear Regression Model
+        </p>
+      </div>
+
+      <!-- Metrics Section -->
+      <section class="metrics-section">
+        <h2>Model Performance</h2>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <label>R² Score</label>
+            <div class="metric-value" id="r2-value">--</div>
+            <div class="metric-desc">Variance explained</div>
+          </div>
+          <div class="metric-card">
+            <label>RMSE</label>
+            <div class="metric-value" id="rmse-value">--</div>
+            <div class="metric-desc">Grade points</div>
+          </div>
+          <div class="metric-card">
+            <label>MAE</label>
+            <div class="metric-value" id="mae-value">--</div>
+            <div class="metric-desc">Grade points</div>
+          </div>
+          <div class="metric-card">
+            <label>Test Samples</label>
+            <div class="metric-value" id="samples-value">--</div>
+            <div class="metric-desc">Evaluated</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input Section -->
+      <section class="input-section">
+        <h2>Student Information</h2>
+        <div class="input-grid">
+          <div class="input-group">
+            <label for="g1">G1 (1st Period Grade, 0-20)</label>
+            <input
+              type="number"
+              id="g1"
+              name="g1"
+              min="0"
+              max="20"
+              value="12"
+            />
+          </div>
+          <div class="input-group">
+            <label for="g2">G2 (2nd Period Grade, 0-20)</label>
+            <input
+              type="number"
+              id="g2"
+              name="g2"
+              min="0"
+              max="20"
+              value="12"
+            />
+          </div>
+          <div class="input-group">
+            <label for="study">Weekly Study Time (hours)</label>
+            <input
+              type="number"
+              id="study"
+              name="study"
+              min="0"
+              max="40"
+              value="5"
+            />
+          </div>
+          <div class="input-group">
+            <label for="absences">Absences</label>
+            <input
+              type="number"
+              id="absences"
+              name="absences"
+              min="0"
+              max="50"
+              value="4"
+            />
+          </div>
+          <div class="input-group">
+            <label for="failures">Past Failures</label>
+            <input
+              type="number"
+              id="failures"
+              name="failures"
+              min="0"
+              max="4"
+              value="0"
+            />
+          </div>
+          <div class="input-group">
+            <label for="goout">Going Out (1=Low, 5=High)</label>
+            <input
+              type="number"
+              id="goout"
+              name="goout"
+              min="1"
+              max="5"
+              value="3"
+            />
+          </div>
+          <div class="input-group">
+            <label for="age">Age (years)</label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              min="15"
+              max="25"
+              value="18"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Section -->
+      <section
+        class="results-section"
+        id="results-section"
+        style="display: none"
+      >
+        <h2>Prediction Results</h2>
+        <div class="results-container">
+          <div class="result-item">
+            <span class="result-label">Predicted Final Grade (G3):</span>
+            <span class="result-value" id="pred-grade">--</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Risk Assessment:</span>
+            <span class="result-value risk-badge" id="risk-assessment">--</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Intervention:</span>
+            <span class="result-insight" id="insight-text">--</span>
+          </div>
+          <div class="result-item features-item">
+            <span class="result-label">Top Contributing Features:</span>
+            <div class="features-list" id="features-list">--</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button class="btn btn-primary" id="predict-btn">Predict Grade</button>
+        <button class="btn btn-secondary" id="reset-btn">Reset</button>
+      </div>
+
+      <!-- Error/Success Messages -->
+      <div class="message-container">
+        <div
+          id="error-message"
+          class="message error-message"
+          style="display: none"
+        ></div>
+        <div
+          id="success-message"
+          class="message success-message"
+          style="display: none"
+        ></div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
