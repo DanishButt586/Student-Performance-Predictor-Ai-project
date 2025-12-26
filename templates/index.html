@@ -8,35 +8,80 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   </head>
   <body>
+    <!-- Top Navigation -->
+    <header class="navbar">
+      <div class="nav-left">
+        <a href="/" class="brand">🎓 Student Predictor</a>
+      </div>
+      <div class="nav-right">
+        <a href="{{ url_for('start') }}" class="btn btn-secondary btn-nav"
+          >Back</a
+        >
+        <a href="{{ url_for('logout') }}" class="btn btn-primary btn-nav"
+          >Logout</a
+        >
+      </div>
+    </header>
+
     <div class="container">
       <!-- Header -->
-      <div class="header">
-        <h1>Student Performance Predictor</h1>
+      <div class="header hero">
+        <h1>Performance Predictor</h1>
         <p class="subtitle">
-          ML-Based Grade Prediction System | Linear Regression Model
+          AI-Powered Grade Prediction • Linear Regression Analysis • Pass/Fail
+          Insights
         </p>
+        <div
+          id="session-info"
+          data-name="{{ student_name if student_name is defined else '' }}"
+          data-sem="{{ semesters_completed if semesters_completed is defined else 0 }}"
+          data-dept="{{ department if department is defined else '' }}"
+        ></div>
+        <div class="student-display" id="student-display"></div>
       </div>
 
       <!-- Metrics Section -->
       <section class="metrics-section">
-        <h2>Model Performance</h2>
+        <h2 class="section-title">Model Performance</h2>
         <div class="metrics-grid">
           <div class="metric-card">
             <label>R² Score</label>
             <div class="metric-value" id="r2-value">--</div>
+            <div class="metric-progress">
+              <div
+                class="metric-progress-bar"
+                id="r2-bar"
+                style="width: 0%"
+              ></div>
+            </div>
             <div class="metric-desc">Variance explained</div>
           </div>
           <div class="metric-card">
             <label>RMSE</label>
             <div class="metric-value" id="rmse-value">--</div>
-            <div class="metric-desc">Grade points</div>
+            <div class="metric-progress">
+              <div
+                class="metric-progress-bar"
+                id="rmse-bar"
+                style="width: 0%"
+              ></div>
+            </div>
+            <div class="metric-desc">Lower is better</div>
           </div>
           <div class="metric-card">
             <label>MAE</label>
             <div class="metric-value" id="mae-value">--</div>
-            <div class="metric-desc">Grade points</div>
+            <div class="metric-progress">
+              <div
+                class="metric-progress-bar"
+                id="mae-bar"
+                style="width: 0%"
+              ></div>
+            </div>
+            <div class="metric-desc">Lower is better</div>
           </div>
           <div class="metric-card">
             <label>Test Samples</label>
@@ -48,108 +93,49 @@
 
       <!-- Input Section -->
       <section class="input-section">
-        <h2>Academic Performance (Semester SGPA)</h2>
+        <h2 class="section-title">Academic Performance</h2>
         <p class="semester-info">
-          Enter your SGPA (0-4.0) for each completed semester. At least 1
-          semester grade is required to predict all remaining semester grades.
-          Maximum 8 semesters.
+          📊 Enter subject grades for each completed semester. SGPA will be
+          automatically calculated based on your grades and credit hours.
         </p>
-        <div class="semester-grid">
-          <div class="input-group">
-            <label for="sem1">Semester 1 SGPA</label>
-            <input
-              type="number"
-              id="sem1"
-              name="sem1"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
+        <!-- Grade-entry instruction and dynamic subject-grade inputs -->
+        <div class="grade-entry-instructions">
+          <h3>Grade Entry Instructions</h3>
+          <p>
+            Enter grades for the following Semesters. Select a letter grade for
+            each subject. The semester SGPA will be automatically calculated.
+          </p>
+
+          <div id="subject-grades-container">
+            <!-- Dynamic subject-grade inputs will be rendered here by script.js -->
           </div>
-          <div class="input-group">
-            <label for="sem2">Semester 2 SGPA</label>
-            <input
-              type="number"
-              id="sem2"
-              name="sem2"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
+          <!-- Attendance inputs for n semesters -->
+          <div
+            id="attendance-section"
+            class="grade-entry-instructions"
+            style="margin-top: 14px"
+          >
+            <h3>Attendance Entry</h3>
+            <p>
+              Enter attendance percentage (0-100) for each subject in your
+              current semester.
+            </p>
+            <div id="attendance-container"><!-- rendered by script.js --></div>
           </div>
-          <div class="input-group">
-            <label for="sem3">Semester 3 SGPA</label>
-            <input
-              type="number"
-              id="sem3"
-              name="sem3"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
-          </div>
-          <div class="input-group">
-            <label for="sem4">Semester 4 SGPA</label>
-            <input
-              type="number"
-              id="sem4"
-              name="sem4"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
-          </div>
-          <div class="input-group">
-            <label for="sem5">Semester 5 SGPA</label>
-            <input
-              type="number"
-              id="sem5"
-              name="sem5"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
-          </div>
-          <div class="input-group">
-            <label for="sem6">Semester 6 SGPA</label>
-            <input
-              type="number"
-              id="sem6"
-              name="sem6"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
-          </div>
-          <div class="input-group">
-            <label for="sem7">Semester 7 SGPA</label>
-            <input
-              type="number"
-              id="sem7"
-              name="sem7"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
-          </div>
-          <div class="input-group">
-            <label for="sem8">Semester 8 SGPA</label>
-            <input
-              type="number"
-              id="sem8"
-              name="sem8"
-              min="0"
-              max="4"
-              step="0.1"
-              placeholder="0.0"
-            />
+
+          <!-- Midterm marks for current semester -->
+          <div
+            id="midterm-section"
+            class="grade-entry-instructions"
+            style="margin-top: 14px"
+          >
+            <h3>Midterm Marks</h3>
+            <p>
+              Enter midterm marks (0-50) for each subject in your current
+              semester.
+            </p>
+            </p>
+            <div id="midterm-container"><!-- rendered by script.js --></div>
           </div>
         </div>
       </section>
@@ -160,7 +146,7 @@
         id="results-section"
         style="display: none"
       >
-        <h2>Prediction Results</h2>
+        <h2 class="section-title">Prediction Results</h2>
         <div class="results-container">
           <div class="result-item">
             <span class="result-label">Current Average SGPA:</span>
@@ -171,8 +157,19 @@
             <span class="result-value" id="trend">--</span>
           </div>
           <div class="result-item full-width">
+            <span class="result-label">Grade Counts:</span>
+            <div class="grade-counts-grid" id="grade-counts-grid">--</div>
+          </div>
+          <div class="result-item full-width">
+            <span class="result-label">Performance Graph:</span>
+            <div class="performance-graph-container" id="performance-graph">
+              <canvas id="performance-chart"></canvas>
+            </div>
+          </div>
+          <div class="result-item full-width">
             <span class="result-label">Predicted Remaining Semesters:</span>
             <div class="predictions-grid" id="predictions-grid">--</div>
+            <div class="predictions-sparkline" id="predictions-sparkline"></div>
           </div>
           <div class="result-item">
             <span class="result-label">Risk Assessment:</span>
@@ -182,6 +179,19 @@
             <span class="result-label">Recommendation:</span>
             <span class="result-insight" id="insight-text">--</span>
           </div>
+          <div
+            class="result-item full-width"
+            id="warning-message-bottom"
+            style="display: none"
+          >
+            <span class="result-label">Warning:</span>
+            <span
+              class="result-value"
+              id="warning-text-bottom"
+              style="color: red"
+              >--</span
+            >
+          </div>
           <div class="result-item features-item">
             <span class="result-label">Key Performance Indicators:</span>
             <div class="features-list" id="features-list">--</div>
@@ -189,9 +199,153 @@
         </div>
       </section>
 
+      <!-- What-If Analysis Section -->
+      <section class="whatif-section" id="whatif-section" style="display: none">
+        <h2 class="section-title">🔮 What-If Analysis</h2>
+        <p class="section-subtitle">Explore how changes in your performance could affect your predicted CGPA</p>
+        
+        <div class="whatif-container">
+          <div class="whatif-controls">
+            <div class="whatif-control-group">
+              <label class="whatif-label">
+                <span class="whatif-label-text">Attendance Percentage</span>
+                <span class="whatif-value" id="whatif-attendance-value">75%</span>
+              </label>
+              <input 
+                type="range" 
+                id="whatif-attendance" 
+                class="whatif-slider" 
+                min="0" 
+                max="100" 
+                value="75" 
+                step="1"
+              />
+              <div class="whatif-range-labels">
+                <span>0%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            <div class="whatif-control-group">
+              <label class="whatif-label">
+                <span class="whatif-label-text">Midterm Performance</span>
+                <span class="whatif-value" id="whatif-midterm-value">25/50</span>
+              </label>
+              <input 
+                type="range" 
+                id="whatif-midterm" 
+                class="whatif-slider" 
+                min="0" 
+                max="50" 
+                value="25" 
+                step="1"
+              />
+              <div class="whatif-range-labels">
+                <span>0</span>
+                <span>50</span>
+              </div>
+            </div>
+
+            <div class="whatif-control-group">
+              <label class="whatif-label">
+                <span class="whatif-label-text">Grade Improvement Target</span>
+                <span class="whatif-value" id="whatif-grade-value">Current</span>
+              </label>
+              <select id="whatif-grade" class="whatif-select">
+                <option value="0">Current Grades</option>
+                <option value="0.3">Improve by 0.3 GPA</option>
+                <option value="0.5">Improve by 0.5 GPA</option>
+                <option value="1.0">Improve by 1.0 GPA</option>
+              </select>
+            </div>
+
+            <button id="whatif-calculate" class="btn btn-primary whatif-btn">
+              Calculate Impact
+            </button>
+          </div>
+
+          <div class="whatif-results" id="whatif-results" style="display: none">
+            <div class="whatif-result-card">
+              <div class="whatif-result-icon">📊</div>
+              <div class="whatif-result-content">
+                <div class="whatif-result-label">Predicted CGPA</div>
+                <div class="whatif-result-value" id="whatif-predicted-cgpa">--</div>
+                <div class="whatif-result-change" id="whatif-cgpa-change">--</div>
+              </div>
+            </div>
+
+            <div class="whatif-result-card">
+              <div class="whatif-result-icon">🎯</div>
+              <div class="whatif-result-content">
+                <div class="whatif-result-label">Pass Probability</div>
+                <div class="whatif-result-value" id="whatif-pass-prob">--</div>
+                <div class="whatif-result-change" id="whatif-pass-change">--</div>
+              </div>
+            </div>
+
+            <div class="whatif-result-card">
+              <div class="whatif-result-icon">💡</div>
+              <div class="whatif-result-content">
+                <div class="whatif-result-label">Outcome</div>
+                <div class="whatif-result-insight" id="whatif-insight">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recommendations Section -->
+      <section class="recommendations-section" id="recommendations-section" style="display: none">
+        <h2 class="section-title">💡 AI-Powered Recommendations</h2>
+        <p class="section-subtitle">Personalized suggestions to improve your academic performance</p>
+        
+        <div class="recommendations-container" id="recommendations-container">
+          <!-- Recommendations will be dynamically generated -->
+        </div>
+      </section>
+
+      <!-- Subject-Specific Predictions Section -->
+      <section class="subject-predictions-section" id="subject-predictions-section" style="display: none">
+        <h2 class="section-title">📚 Subject-Specific Performance Analysis</h2>
+        <p class="section-subtitle">Individual subject predictions and targeted recommendations</p>
+        
+        <div class="subject-predictions-container">
+          <!-- Subject Performance Overview -->
+          <div class="subject-overview-cards" id="subject-overview-cards">
+            <!-- Will be dynamically generated -->
+          </div>
+
+          <!-- Subjects Needing Attention -->
+          <div class="attention-section" id="attention-section" style="display: none">
+            <h3 class="subsection-title">⚠️ Subjects Requiring Attention</h3>
+            <div class="attention-subjects-grid" id="attention-subjects-grid">
+              <!-- Will be dynamically generated -->
+            </div>
+          </div>
+
+          <!-- Strong Subjects -->
+          <div class="strong-section" id="strong-section" style="display: none">
+            <h3 class="subsection-title">🌟 Your Strong Subjects</h3>
+            <div class="strong-subjects-grid" id="strong-subjects-grid">
+              <!-- Will be dynamically generated -->
+            </div>
+          </div>
+
+          <!-- Subject-wise Predictions Chart -->
+          <div class="subject-chart-section">
+            <h3 class="subsection-title">📊 Subject Performance Comparison</h3>
+            <div class="subject-chart-container">
+              <canvas id="subject-comparison-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Buttons -->
       <div class="button-group">
-        <button class="btn btn-primary" id="predict-btn">Predict Grade</button>
+        <button class="btn btn-primary" id="predict-btn">
+          Predict Grade
+        </button>
         <button class="btn btn-secondary" id="reset-btn">Reset</button>
       </div>
 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Student Predictor</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="nav-left">
+        <a href="/" class="brand">🎓 Student Predictor</a>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="header hero">
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in to access your performance dashboard</p>
+        <div class="info-banner">👨‍🏫 Teacher Login: Aatka Ali / Aatka123</div>
+      </div>
+
+      {% if error %}
+      <div class="message error-message">{{ error }}</div>
+      {% endif %}
+
+      <section class="input-section">
+        <h2 class="section-title">Sign In</h2>
+        <form method="post" action="{{ url_for('login') }}" class="login-form">
+          <div class="form-row">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter username"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <label for="password">Password</label>
+            <div class="input-with-addon">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                required
+              />
+              <button
+                type="button"
+                class="btn btn-secondary btn-icon"
+                id="toggle-password"
+                aria-label="Show password"
+              >
+                👁
+              </button>
+            </div>
+          </div>
+          <div class="button-group" style="margin-top: 20px">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+        </form>
+
+        <div
+          style="
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+          "
+        >
+          <p style="color: #b0b0b0; margin-bottom: 15px">
+            <a
+              href="{{ url_for('forgot_password') }}"
+              style="color: #ffd700; text-decoration: none; font-weight: 600"
+              >Forgot Password?</a
+            >
+          </p>
+          <p style="color: #b0b0b0">
+            Don't have an account?
+            <a
+              href="{{ url_for('register') }}"
+              style="color: #ffd700; text-decoration: none; font-weight: 600"
+              >Register as Student</a
+            >
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const toggleBtn = document.getElementById("toggle-password");
+      const pwdInput = document.getElementById("password");
+      if (toggleBtn && pwdInput) {
+        toggleBtn.addEventListener("click", () => {
+          const isHidden = pwdInput.type === "password";
+          pwdInput.type = isHidden ? "text" : "password";
+          toggleBtn.textContent = isHidden ? "🙈" : "👁";
+          toggleBtn.setAttribute(
+            "aria-label",
+            isHidden ? "Hide password" : "Show password"
+          );
+        });
+      }
+    </script>
+  </body>
+</html>

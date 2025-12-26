@@ -1,0 +1,4 @@
+username,password_hash,full_name,department,semester,registration_date,last_login,is_active
+Danish Butt,scrypt:32768:8:1$aZ9kAqYjFo4n8qw9$71a100cfb7f2ce2eef0d20f0d7fab66ab1cc1809a90830170df8c930b8b16444ab045fd0f53b7c856cecf8387d40b0d928c70b2a3e06d81d28b23982a8f8dd60,Danish Butt,Computer Science,3,2025-12-26 02:24:08,2025-12-26 02:43:11,True
+Muhammad Rayyan Javed,scrypt:32768:8:1$tH1tliR8vDEXUhWa$f5675b22093e9124c8615a3bf20b51e1567097e4fab59a661d02172cd68032177c7cbd5da5af789b6950ad2f2ef6204c02a3a7e0a7d18e9c37534c4ad8c831f1,Muhammad Rayyan Javed,Software Engineering,4,2025-12-26 10:38:21,2025-12-26 10:38:35,True
+Sadiya,scrypt:32768:8:1$UvUcoNaBFesgvBow$44483d63aa38692eb5fd475a364c1b0b9a975e2a135f5de0a2eebc4f5290fa867d283b7f731c1c2b0c5e44d081b6f2bd18f1e6854117f549115ac0858f259bb4,Sadiya,Computer Science,2,2025-12-26 10:50:50,2025-12-26 10:51:01,True

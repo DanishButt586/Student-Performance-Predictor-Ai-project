@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}?v={{ range(1, 999999) | random }}"
+    />
+    <script>
+      // Store all students data for filtering - MUST be defined before teacher.js loads
+      const allStudentsData = {
+        best: {{ best_students|tojson }},
+        average: {{ average_students|tojson }},
+        worst: {{ worst_students|tojson }}
+      };
+    </script>
+    <script
+      defer
+      src="{{ url_for('static', filename='teacher.js') }}?v={{ range(1, 999999) | random }}"
+    ></script>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="nav-left">
+        <a href="/" class="brand">🎓 Student Predictor</a>
+      </div>
+      <div class="nav-right">
+        <a href="{{ url_for('logout') }}" class="btn btn-primary btn-nav"
+          >Logout</a
+        >
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="header hero">
+        <h1>Teacher Dashboard</h1>
+        <p class="subtitle">📊 Model Performance Overview & Analytics</p>
+        <div class="info-banner">
+          🎯 Access comprehensive model metrics and performance indicators.
+          Students can access predictions through their dashboard.
+        </div>
+      </div>
+
+      <section class="metrics-section">
+        <h2 class="section-title">Model Performance Metrics</h2>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <label>R² Score</label>
+            <div class="metric-value" id="r2-value">{{ '%.3f' % r2 }}</div>
+          </div>
+          <div class="metric-card">
+            <label>RMSE</label>
+            <div class="metric-value" id="rmse-value">{{ '%.3f' % rmse }}</div>
+          </div>
+          <div class="metric-card">
+            <label>MAE</label>
+            <div class="metric-value" id="mae-value">{{ '%.3f' % mae }}</div>
+          </div>
+          <div class="metric-card">
+            <label>Test Samples</label>
+            <div class="metric-value" id="samples-value">
+              {{ test_samples }}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Department Statistics Section -->
+      <section class="dept-stats-section">
+        <h2 class="section-title">Department-wise Performance Comparison</h2>
+        <div class="dept-stats-grid">
+          {% for dept in dept_stats %}
+          <div class="dept-stat-card">
+            <div class="dept-header">
+              <h3 class="dept-name">{{ dept.name }}</h3>
+              <span class="dept-total">{{ dept.total_students }} students</span>
+            </div>
+            <div class="dept-metrics">
+              <div class="dept-metric">
+                <span class="dept-metric-label">Avg CGPA</span>
+                <span class="dept-metric-value"
+                  >{{ "%.2f"|format(dept.avg_cgpa) }}</span
+                >
+              </div>
+              <div class="dept-metric">
+                <span class="dept-metric-label">Attendance</span>
+                <span class="dept-metric-value"
+                  >{{ "%.0f"|format(dept.avg_attendance) }}%</span
+                >
+              </div>
+            </div>
+            <div class="dept-performance-bars">
+              <div class="performance-bar-group">
+                <div class="performance-bar-label">
+                  <span>🏆 Best</span>
+                  <span>{{ dept.best_count }}</span>
+                </div>
+                <div class="performance-bar">
+                  <div
+                    class="performance-bar-fill best"
+                    style="width: {{ (dept.best_count / dept.total_students * 100)|int }}%"
+                  ></div>
+                </div>
+              </div>
+              <div class="performance-bar-group">
+                <div class="performance-bar-label">
+                  <span>📊 Average</span>
+                  <span>{{ dept.average_count }}</span>
+                </div>
+                <div class="performance-bar">
+                  <div
+                    class="performance-bar-fill average"
+                    style="width: {{ (dept.average_count / dept.total_students * 100)|int }}%"
+                  ></div>
+                </div>
+              </div>
+              <div class="performance-bar-group">
+                <div class="performance-bar-label">
+                  <span>⚠️ Needs Improvement</span>
+                  <span>{{ dept.worst_count }}</span>
+                </div>
+                <div class="performance-bar">
+                  <div
+                    class="performance-bar-fill worst"
+                    style="width: {{ (dept.worst_count / dept.total_students * 100)|int }}%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Student Performance Categories Section -->
+      <section class="students-container">
+        <div class="students-header">
+          <h2 class="section-title">Student Performance Overview</h2>
+
+          <!-- Search and Filter Controls -->
+          <div class="search-filter-controls">
+            <div class="search-box">
+              <input
+                type="text"
+                id="student-search"
+                placeholder="🔍 Search by name..."
+              />
+            </div>
+            <div class="filter-group">
+              <select id="filter-department">
+                <option value="">All Departments</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Software Engineering">
+                  Software Engineering
+                </option>
+                <option value="Cyber Security">Cyber Security</option>
+              </select>
+              <select id="filter-semester">
+                <option value="">All Semesters</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+              </select>
+              <select id="filter-cgpa">
+                <option value="">All CGPA Ranges</option>
+                <option value="3.5-4.0">3.5 - 4.0</option>
+                <option value="3.0-3.5">3.0 - 3.5</option>
+                <option value="2.5-3.0">2.5 - 3.0</option>
+                <option value="2.0-2.5">2.0 - 2.5</option>
+                <option value="0-2.0">Below 2.0</option>
+              </select>
+              <button id="reset-filters" class="btn-reset">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Best Performing Students -->
+        <div class="student-category-section best-students">
+          <div class="category-header">
+            <div class="category-icon">🏆</div>
+            <h3 class="category-title">Best Performers</h3>
+            <span class="category-badge best-badge">CGPA ≥ 3.5</span>
+          </div>
+          <div class="students-grid">
+            {% for student in best_students %}
+            <div
+              class="student-card best"
+              data-student-id="{{ student.id }}"
+              data-student-name="{{ student.name }}"
+              data-student-cgpa="{{ student.cgpa }}"
+              data-student-semester="{{ student.semester }}"
+              data-student-department="{{ student.department }}"
+              data-student-attendance="{{ student.attendance }}"
+              data-student-data="{{ student|tojson }}"
+            >
+              <div class="student-header">
+                <div class="student-avatar best">{{ student.name[0] }}</div>
+                <div class="student-info">
+                  <h4 class="student-name">{{ student.name }}</h4>
+                  <p class="student-dept">{{ student.department }}</p>
+                </div>
+              </div>
+              <div class="student-stats">
+                <div class="stat-item">
+                  <span class="stat-label">CGPA</span>
+                  <span class="stat-value cgpa-best"
+                    >{{ "%.2f"|format(student.cgpa) }}</span
+                  >
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Semester</span>
+                  <span class="stat-value">{{ student.semester }}</span>
+                </div>
+              </div>
+              <button
+                class="btn-view-details"
+                data-student-id="{{ student.id }}"
+              >
+                👁️ View Details
+              </button>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Average Performing Students -->
+        <div class="student-category-section average-students">
+          <div class="category-header">
+            <div class="category-icon">📊</div>
+            <h3 class="category-title">Average Performers</h3>
+            <span class="category-badge average-badge">2.5 ≤ CGPA < 3.5</span>
+          </div>
+          <div class="students-grid">
+            {% for student in average_students %}
+            <div
+              class="student-card average"
+              data-student-id="{{ student.id }}"
+              data-student-name="{{ student.name }}"
+              data-student-cgpa="{{ student.cgpa }}"
+              data-student-semester="{{ student.semester }}"
+              data-student-department="{{ student.department }}"
+              data-student-attendance="{{ student.attendance }}"
+              data-student-data="{{ student|tojson }}"
+            >
+              <div class="student-header">
+                <div class="student-avatar average">{{ student.name[0] }}</div>
+                <div class="student-info">
+                  <h4 class="student-name">{{ student.name }}</h4>
+                  <p class="student-dept">{{ student.department }}</p>
+                </div>
+              </div>
+              <div class="student-stats">
+                <div class="stat-item">
+                  <span class="stat-label">CGPA</span>
+                  <span class="stat-value cgpa-average"
+                    >{{ "%.2f"|format(student.cgpa) }}</span
+                  >
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Semester</span>
+                  <span class="stat-value">{{ student.semester }}</span>
+                </div>
+              </div>
+              <button
+                class="btn-view-details"
+                data-student-id="{{ student.id }}"
+              >
+                👁️ View Details
+              </button>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Needs Improvement Students -->
+        <div class="student-category-section worst-students">
+          <div class="category-header">
+            <div class="category-icon">⚠️</div>
+            <h3 class="category-title">Needs Improvement</h3>
+            <span class="category-badge worst-badge">CGPA < 2.5</span>
+          </div>
+          <div class="students-grid">
+            {% for student in worst_students %}
+            <div
+              class="student-card worst"
+              data-student-id="{{ student.id }}"
+              data-student-name="{{ student.name }}"
+              data-student-cgpa="{{ student.cgpa }}"
+              data-student-semester="{{ student.semester }}"
+              data-student-department="{{ student.department }}"
+              data-student-attendance="{{ student.attendance }}"
+              data-student-data="{{ student|tojson }}"
+            >
+              <div class="student-header">
+                <div class="student-avatar worst">{{ student.name[0] }}</div>
+                <div class="student-info">
+                  <h4 class="student-name">{{ student.name }}</h4>
+                  <p class="student-dept">{{ student.department }}</p>
+                </div>
+              </div>
+              <div class="student-stats">
+                <div class="stat-item">
+                  <span class="stat-label">CGPA</span>
+                  <span class="stat-value cgpa-worst"
+                    >{{ "%.2f"|format(student.cgpa) }}</span
+                  >
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Semester</span>
+                  <span class="stat-value">{{ student.semester }}</span>
+                </div>
+              </div>
+              <button
+                class="btn-view-details"
+                data-student-id="{{ student.id }}"
+              >
+                👁️ View Details
+              </button>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <section class="input-section">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="button-group">
+          <a class="btn btn-secondary" href="{{ url_for('logout') }}">
+            🚪 Sign Out
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <!-- Student Detail Modal -->
+    <div id="student-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-student-name">Student Details</h2>
+          <button class="modal-close" onclick="closeStudentModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-student-info">
+            <div class="modal-info-card">
+              <span class="modal-info-label">Department</span>
+              <span class="modal-info-value" id="modal-department"></span>
+            </div>
+            <div class="modal-info-card">
+              <span class="modal-info-label">Current Semester</span>
+              <span class="modal-info-value" id="modal-semester"></span>
+            </div>
+            <div class="modal-info-card">
+              <span class="modal-info-label">Overall CGPA</span>
+              <span class="modal-info-value" id="modal-cgpa"></span>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="modal-section-title">📊 SGPA Trend Across Semesters</h3>
+            <p class="section-description">
+              Track the student's academic performance over time. Higher SGPA
+              indicates better performance (Scale: 0.0 to 4.0)
+            </p>
+            <div class="chart-container">
+              <canvas id="student-performance-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <h3 class="modal-section-title">
+              📚 Semester-wise Subject Grades & SGPA
+            </h3>
+            <p class="section-description">
+              Click on each semester to view detailed subject grades and
+              calculated SGPA
+            </p>
+            <div id="modal-all-semesters"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  </body>
+</html>

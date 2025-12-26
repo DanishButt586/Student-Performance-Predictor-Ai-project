@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome - Student Predictor</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="nav-left">
+        <a href="/" class="brand">🎓 Student Predictor</a>
+      </div>
+      <div class="nav-right">
+        <a href="{{ url_for('logout') }}" class="btn btn-primary btn-nav"
+          >Logout</a
+        >
+      </div>
+    </header>
+    <div class="container">
+      <div class="header hero">
+        <h1>Student Information</h1>
+        <p class="subtitle">
+          Enter student details to access the performance predictor
+        </p>
+      </div>
+
+      <section class="input-section">
+        <h2 class="section-title">Student Details</h2>
+        <form action="/predictor" method="get" id="start-form">
+          <div class="form-row">
+            <label for="name">Student Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Full name"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="semesters">Current Semester Enrolled In</label>
+            <select id="semesters" name="semesters" required>
+              <option value="">Select semester</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="department">Department</label>
+            <select id="department" name="department" required>
+              <option value="">Select department</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Software Engineering">Software Engineering</option>
+              <option value="Cyber Security">Cyber Security</option>
+            </select>
+          </div>
+
+          <div class="button-group" style="margin-top: 20px">
+            <button class="btn btn-primary" type="submit">Continue</button>
+            <a href="{{ url_for('login') }}" class="btn btn-secondary">Back</a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>

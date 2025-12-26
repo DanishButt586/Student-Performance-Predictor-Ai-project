@@ -1,0 +1,5 @@
+prediction_id,username,timestamp,semester,predicted_cgpa,predicted_grade,pass_probability,attendance,study_hours,absences,actual_cgpa,actual_grade,accuracy_score,updated_at
+Danish Butt_20251226024514,Danish Butt,2025-12-26 02:45:14,3,3.89,A,100.0,"{'3': {'CS270 Professional Practices': 80, 'CS214 Data Structures and Algorithms': 90, 'CS214L Data Structures and Algorithms Lab': 80, 'CS223 Computer Organization and Assembly Language': 90, 'CS223L Computer Organization & Assembly Language Lab': 80, 'MA105 Multivariable Calculus': 80, 'MA216 Discrete Structures': 80}}",,,,,,
+Muhammad Rayyan Javed_20251226104011,Muhammad Rayyan Javed,2025-12-26 10:40:11,4,3.588,A-,100.0,76,,,,,,
+Sadiya_20251226105157,Sadiya,2025-12-26 10:51:57,2,3.832857142857143,A,100.0,85,,,,,,
+Sadiya_20251226105410,Sadiya,2025-12-26 10:54:10,2,1.2485714285714287,D,62.42857142857143,85,,,,,,
