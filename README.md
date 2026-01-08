@@ -1,7 +1,8 @@
 <div align="center">
 
 # 🎓 Student Performance Prediction System
-### *Using Machine Learning & Artificial Intelligence*
+
+### _Using Machine Learning & Artificial Intelligence_
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.0.0-green?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
@@ -48,6 +49,7 @@ The **Student Performance Prediction System** is a comprehensive full-stack web 
 ### 🎯 Problem Statement
 
 Traditional education systems face challenges in identifying at-risk students early, leading to:
+
 - ⏰ **Late Intervention** - Problems discovered only after semester results
 - 📊 **Data Fragmentation** - Student information scattered across systems
 - ❌ **Reactive Approach** - Lack of predictive insights for proactive support
@@ -56,6 +58,7 @@ Traditional education systems face challenges in identifying at-risk students ea
 ### 💡 Our Solution
 
 Machine Learning-powered predictive analytics that enables:
+
 - ✅ **Early Detection** of struggling students
 - ✅ **Data-Driven Decisions** for resource allocation
 - ✅ **Proactive Interventions** before it's too late
@@ -66,6 +69,7 @@ Machine Learning-powered predictive analytics that enables:
 ## ✨ Key Features
 
 ### 🎓 For Students
+
 - **Secure Registration & Login** with password hashing (pbkdf2:sha256)
 - **Grade Input Interface** for 9 subjects across 3 departments
 - **Instant SGPA Prediction** using trained ML model (R² = 0.82)
@@ -74,6 +78,7 @@ Machine Learning-powered predictive analytics that enables:
 - **Auto-fill Functionality** for quick grade entry
 
 ### 👩‍🏫 For Teachers
+
 - **Comprehensive Dashboard** showing all registered students
 - **Performance Categories** (Excellent, Good, Average, Below Average, Poor)
 - **Advanced Filtering** by department, semester, and performance
@@ -82,6 +87,7 @@ Machine Learning-powered predictive analytics that enables:
 - **Export Capabilities** for reports and analysis
 
 ### 🔒 Security Features
+
 - Password hashing using industry-standard algorithms
 - Session management with 2-hour timeout
 - CSRF protection and secure form handling
@@ -93,23 +99,26 @@ Machine Learning-powered predictive analytics that enables:
 ## 🛠️ Technology Stack
 
 ### Backend
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white) | 3.9+ | Core programming language |
-| ![Flask](https://img.shields.io/badge/Flask-3.0.0-000000?logo=flask) | 3.0.0 | Web framework |
-| ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.2-F7931E?logo=scikit-learn&logoColor=white) | 1.3.2 | Machine learning |
-| ![pandas](https://img.shields.io/badge/pandas-2.1.4-150458?logo=pandas) | 2.1.4 | Data manipulation |
-| ![NumPy](https://img.shields.io/badge/NumPy-1.26.2-013243?logo=numpy) | 1.26.2 | Numerical computing |
+
+| Technology                                                                                                 | Version | Purpose                   |
+| ---------------------------------------------------------------------------------------------------------- | ------- | ------------------------- |
+| ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)                     | 3.9+    | Core programming language |
+| ![Flask](https://img.shields.io/badge/Flask-3.0.0-000000?logo=flask)                                       | 3.0.0   | Web framework             |
+| ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.2-F7931E?logo=scikit-learn&logoColor=white) | 1.3.2   | Machine learning          |
+| ![pandas](https://img.shields.io/badge/pandas-2.1.4-150458?logo=pandas)                                    | 2.1.4   | Data manipulation         |
+| ![NumPy](https://img.shields.io/badge/NumPy-1.26.2-013243?logo=numpy)                                      | 1.26.2  | Numerical computing       |
 
 ### Frontend
-| Technology | Purpose |
-|-----------|---------|
-| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) | Structure |
-| ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3) | Styling |
-| ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black) | Interactivity |
-| ![Chart.js](https://img.shields.io/badge/Chart.js-4.4.0-FF6384?logo=chart.js) | Data visualization |
+
+| Technology                                                                                         | Purpose            |
+| -------------------------------------------------------------------------------------------------- | ------------------ |
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)                     | Structure          |
+| ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3)                                        | Styling            |
+| ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black) | Interactivity      |
+| ![Chart.js](https://img.shields.io/badge/Chart.js-4.4.0-FF6384?logo=chart.js)                      | Data visualization |
 
 ### Database
+
 - **CSV-based Storage** (users.csv, sessions.csv, predictions_history.csv, student_grades.csv)
 - Easily upgradeable to SQL database for production
 
@@ -153,17 +162,20 @@ Machine Learning-powered predictive analytics that enables:
 ## 💻 Installation
 
 ### Prerequisites
+
 - Python 3.9 or higher
 - pip (Python package manager)
 - Virtual environment (recommended)
 
 ### Step 1: Clone the Repository
+
 ```bash
 git clone https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project.git
 cd Student-Performance-Predictor-Ai-project
 ```
 
 ### Step 2: Create Virtual Environment
+
 ```bash
 # Windows
 python -m venv .venv
@@ -175,11 +187,13 @@ source .venv/bin/activate
 ```
 
 ### Step 3: Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 **Required Packages:**
+
 ```
 Flask==3.0.0
 pandas==2.1.4
@@ -193,6 +207,7 @@ python-pptx==1.0.2
 ```
 
 ### Step 4: Run the Application
+
 ```bash
 python app.py
 ```
@@ -200,6 +215,7 @@ python app.py
 The application will start on `http://127.0.0.1:5000/`
 
 ### Step 5: Access the System
+
 1. **Register** as a new student
 2. **Login** with your credentials
 3. **Enter grades** for 9 subjects
@@ -213,6 +229,7 @@ For **Teacher Access**, use the teacher login credentials (configured in the sys
 ## 🚀 Usage
 
 ### Running the Web Application
+
 ```bash
 # Option 1: Direct Python execution
 python app.py
@@ -225,6 +242,7 @@ flask run
 ```
 
 ### Running GUI Version (Jupyter Notebook)
+
 ```bash
 # Start Jupyter
 jupyter notebook
@@ -235,6 +253,7 @@ jupyter notebook
 ```
 
 ### Generating Documentation
+
 ```bash
 # Generate Word report
 python generate_report.py
@@ -293,6 +312,7 @@ Student-Performance-Predictor/
 ### Algorithm: Linear Regression
 
 **Why Linear Regression?**
+
 - ✅ **High Accuracy**: R² Score = 0.82 (82% variance explained)
 - ✅ **Fast Predictions**: <200ms response time
 - ✅ **Interpretable**: Clear relationship between features and output
@@ -300,30 +320,32 @@ Student-Performance-Predictor/
 
 ### Model Performance
 
-| Metric | Value | Description |
-|--------|-------|-------------|
-| **R² Score** | 0.82 | Model explains 82% of grade variance |
-| **MAE** | 1.86 | Average error of ±1.86% |
-| **RMSE** | 2.43 | Root mean squared error |
-| **Training Time** | 0.02s | Lightning-fast training |
+| Metric            | Value | Description                          |
+| ----------------- | ----- | ------------------------------------ |
+| **R² Score**      | 0.82  | Model explains 82% of grade variance |
+| **MAE**           | 1.86  | Average error of ±1.86%              |
+| **RMSE**          | 2.43  | Root mean squared error              |
+| **Training Time** | 0.02s | Lightning-fast training              |
 
 ### Comparison with Other Models
 
-| Algorithm | R² Score | MAE | RMSE | Training Time |
-|-----------|----------|-----|------|---------------|
-| **Linear Regression** ✓ | **0.82** | **1.86** | **2.43** | **0.02s** |
-| Ridge Regression | 0.81 | 1.89 | 2.45 | 0.03s |
-| Random Forest | 0.84 | 1.78 | 2.35 | 1.20s |
-| Decision Tree | 0.75 | 2.12 | 2.78 | 0.08s |
+| Algorithm               | R² Score | MAE      | RMSE     | Training Time |
+| ----------------------- | -------- | -------- | -------- | ------------- |
+| **Linear Regression** ✓ | **0.82** | **1.86** | **2.43** | **0.02s**     |
+| Ridge Regression        | 0.81     | 1.89     | 2.45     | 0.03s         |
+| Random Forest           | 0.84     | 1.78     | 2.35     | 1.20s         |
+| Decision Tree           | 0.75     | 2.12     | 2.78     | 0.08s         |
 
 **Selected Model**: Linear Regression offers the best balance of accuracy and speed for real-time predictions.
 
 ### Features Used
+
 - **Input**: 9 subject grades (each 0-100)
 - **Output**: Predicted SGPA (0-4.0 scale)
 - **Departments**: Computer Science, Software Engineering, Cyber Security
 
 ### Training Dataset
+
 - **Source**: UCI Machine Learning Repository (Student Performance Dataset)
 - **Records**: 395 student entries
 - **Features**: 33 attributes including grades, demographics, and study habits
@@ -334,16 +356,20 @@ Student-Performance-Predictor/
 ## 📸 Screenshots
 
 ### 🏠 Landing Page
-*Beautiful hero section with system overview*
+
+_Beautiful hero section with system overview_
 
 ### 🎓 Student Dashboard
-*Interactive grade input and SGPA prediction with charts*
+
+_Interactive grade input and SGPA prediction with charts_
 
 ### 👩‍🏫 Teacher Dashboard
-*Comprehensive student monitoring with filtering and analytics*
+
+_Comprehensive student monitoring with filtering and analytics_
 
 ### 📊 Performance Charts
-*Visual representation of academic trends and attendance*
+
+_Visual representation of academic trends and attendance_
 
 ---
 
@@ -352,18 +378,21 @@ Student-Performance-Predictor/
 <div align="center">
 
 ### 🏆 Team Leader
+
 **Danish Butt**  
 Roll No: 233606  
 [![GitHub](https://img.shields.io/badge/GitHub-DanishButt586-181717?logo=github)](https://github.com/DanishButt586)
 
 ### 👨‍💻 Team Members
-| Name | Roll Number |
-|------|-------------|
-| **Sadia Khan** | 233544 |
-| **Rayyan Javed** | 233532 |
-| **Owaif Amir** | 233586 |
+
+| Name             | Roll Number |
+| ---------------- | ----------- |
+| **Sadia Khan**   | 233544      |
+| **Rayyan Javed** | 233532      |
+| **Owaif Amir**   | 233586      |
 
 ### 👩‍🏫 Instructor
+
 **Mam Atika**  
 Air University, Multan Campus
 
@@ -382,6 +411,7 @@ We welcome contributions! Here's how you can help:
 5. 🎉 **Open** a Pull Request
 
 ### Development Guidelines
+
 - Follow PEP 8 style guide for Python code
 - Write clear commit messages
 - Add comments for complex logic
@@ -414,7 +444,7 @@ copies or substantial portions of the Software.
 
 ## 📚 References
 
-1. **Dataset**: Cortez, Paulo. (2014). *Student Performance*. UCI Machine Learning Repository.  
+1. **Dataset**: Cortez, Paulo. (2014). _Student Performance_. UCI Machine Learning Repository.  
    [https://doi.org/10.24432/C5TG7T](https://doi.org/10.24432/C5TG7T)
 
 2. **Flask Documentation**: [https://flask.palletsprojects.com/](https://flask.palletsprojects.com/)
@@ -457,7 +487,7 @@ copies or substantial portions of the Software.
 
 **Made with ❤️ by Team Danish Butt**
 
-*Empowering education through artificial intelligence*
+_Empowering education through artificial intelligence_
 
 [![GitHub stars](https://img.shields.io/github/stars/DanishButt586/Student-Performance-Predictor-Ai-project?style=social)](https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/DanishButt586/Student-Performance-Predictor-Ai-project?style=social)](https://github.com/DanishButt586/Student-Performance-Predictor-Ai-project/network/members)

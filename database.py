@@ -346,7 +346,10 @@ class ExcelDatabase:
             # Get all predictions for this student
             student_predictions = predictions_df[predictions_df['username'] == username]
             
-            if not student_predictions.empty:
+            # Check if student has predictions
+            has_predictions = not student_predictions.empty
+            
+            if has_predictions:
                 # Get latest prediction
                 latest_pred = student_predictions.sort_values('timestamp', ascending=False).iloc[0]
                 
@@ -567,6 +570,29 @@ class ExcelDatabase:
                     'subjects': subjects,
                     'history': history,
                     'semester_details': list(semester_details.values())  # All semester grades with SGPA
+                }
+                
+                students_data.append(student_data)
+            
+            else:
+                # Student has no predictions yet - show basic info with default values
+                student_data = {
+                    'id': username,
+                    'name': student['full_name'],
+                    'cgpa': 0.0,  # No predictions yet
+                    'semester': int(student['semester']) if pd.notna(student['semester']) else 1,
+                    'department': student['department'] if pd.notna(student['department']) else 'N/A',
+                    'attendance': 0,
+                    'prediction_count': 0,
+                    'latest_prediction': {
+                        'cgpa': 0.0,
+                        'grade': 'N/A',
+                        'pass_probability': 0.0,
+                        'timestamp': 'No predictions yet'
+                    },
+                    'subjects': [],
+                    'history': [],
+                    'semester_details': []
                 }
                 
                 students_data.append(student_data)
